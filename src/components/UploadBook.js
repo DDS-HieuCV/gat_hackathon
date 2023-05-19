@@ -2,13 +2,16 @@ import React, { useState } from "react";
 import { AppDialog, CenterBox } from "./index";
 import { AddCircle } from "@mui/icons-material";
 import { Button, Typography, TextField, Stack } from "@mui/material";
+import { useAppContext } from "../context/AppContext";
 
 const UploadBook = () => {
+  const { mintBook } = useAppContext();
+
   const [isShow, setIsShow] = useState(false);
   const [book, setBook] = useState({ title: "", author: "" });
 
   const handleMintBook = () => {
-    alert(`Mint ${book.title} - ${book.author}`);
+    mintBook(book);
     setIsShow(false);
   };
 

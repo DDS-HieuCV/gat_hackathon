@@ -74,7 +74,7 @@ export const AppPath = {
 };
 
 const StyledLink = styled(AppLink)((props) => ({
-  color: props.active ? "primary.main" : "black",
+  color: props.active ? "primary.dark" : "black",
   fontWeight: 700,
   fontSize: 20,
   padding: 8,

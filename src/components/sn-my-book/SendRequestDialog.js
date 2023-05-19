@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {
   Button,
   Typography,
-  Paper,
   Stack,
   TableContainer,
   Table,
@@ -13,12 +12,17 @@ import {
 import AppDialog from "../AppDialog";
 import { DEFAULT_BOOK } from "../../pages/my-book";
 
-const SendRequestDialog = ({ onClose, ...otherProps }) => {
+const SendRequestDialog = ({ book, onClose, ...otherProps }) => {
   const [bookList, setBookList] = useState(DEFAULT_BOOK);
+  const [swapBook, setSwapBook] = useState();
 
-  const handleSwap = () => {
+  const handleSwap = (selectedBook) => {
+    setSwapBook(selectedBook);
     alert(`Swap`);
-    onClose();
+    setTimeout(() => {
+      onClose();
+      setSwapBook();
+    }, 2000);
   };
 
   return (
@@ -31,15 +35,12 @@ const SendRequestDialog = ({ onClose, ...otherProps }) => {
           <Table aria-label="simple table">
             <TableBody>
               {bookList.map((book, index) => (
-                <TableRow
-                  key={index}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
+                <TableRow key={index}>
+                  <TableCell>
                     <Typography
                       sx={{
                         fontWeight: 500,
-                        fontSize: 20,
+                        fontSize: 30,
                         color: "#1E1E1E",
                       }}
                     >
@@ -49,8 +50,8 @@ const SendRequestDialog = ({ onClose, ...otherProps }) => {
                   <TableCell align="right">
                     <Typography
                       sx={{
-                        fontWeight: 500,
-                        fontSize: 20,
+                        fontWeight: 400,
+                        fontSize: 24,
                         color: "#1E1E1E",
                       }}
                     >
@@ -60,7 +61,7 @@ const SendRequestDialog = ({ onClose, ...otherProps }) => {
                   <TableCell align="right">
                     <Typography
                       sx={{
-                        fontWeight: 500,
+                        fontWeight: 700,
                         fontSize: 20,
                         color: "#1E1E1E",
                       }}
@@ -72,9 +73,17 @@ const SendRequestDialog = ({ onClose, ...otherProps }) => {
                     <Button
                       size="large"
                       variant="contained"
-                      onClick={handleSwap}
+                      onClick={() => handleSwap(book)}
+                      style={{
+                        background:
+                          swapBook?.title === book.title
+                            ? "#C6D2FD"
+                            : "#4A3AFF",
+                        color: "white",
+                      }}
+                      disabled={swapBook?.title === book.title}
                     >
-                      Swap
+                      {swapBook?.title === book.title ? "Pending" : "Swap"}
                     </Button>
                   </TableCell>
                 </TableRow>
@@ -92,4 +101,9 @@ export default SendRequestDialog;
 export const getFormatAddress = (address) => {
   const length = address.length;
   return `${address.slice(0, 4)}...${address.slice(length - 4, length)}`;
+};
+
+export const SWAP_STATUS = {
+  PENDING: 2,
+  SUCCESS: 2,
 };

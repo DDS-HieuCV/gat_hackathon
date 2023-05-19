@@ -3,8 +3,11 @@ import { Container, Stack } from "@mui/material";
 import EmptyBook from "../components/sn-my-book/EmptyBook";
 import MyBookItem from "../components/sn-my-book/MyBookItem";
 import SendRequestDialog from "../components/sn-my-book/SendRequestDialog";
+import { useAppContext } from "../context/AppContext";
 
 const MyBook = () => {
+  const { myBook } = useAppContext();
+
   const [bookList, setBookList] = useState([]);
   const [isFetching, setIsFetching] = useState(true);
   const [isShowSwap, setIsShowSwap] = useState(false);
@@ -15,15 +18,20 @@ const MyBook = () => {
     setSelectedBook(book);
   };
 
-  const handleCloseDialog = (book) => {
+  const handleCloseDialog = () => {
     setIsShowSwap(false);
     setSelectedBook();
   };
 
   useEffect(() => {
+    if (!isFetching) {
+      setBookList(myBook);
+    }
+  }, [myBook, isFetching]);
+
+  useEffect(() => {
     setTimeout(() => {
       setIsFetching(false);
-      setBookList(DEFAULT_BOOK);
     }, 1000);
   }, []);
 
@@ -52,8 +60,3 @@ const MyBook = () => {
 };
 
 export default MyBook;
-export const DEFAULT_BOOK = Array.from(Array(10).keys()).map((index) => ({
-  title: "Book - " + (index + 1),
-  author: "Author - " + index + 1,
-  ownerAddress: "0x23355234333432423",
-}));

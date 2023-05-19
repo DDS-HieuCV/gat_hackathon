@@ -30,6 +30,7 @@ const MyBookItem = ({ book = {}, onSwap }) => {
               width: "100%",
               height: "100%",
               background: "rgba(182, 182, 182, 0.6)",
+              borderRadius: "24px",
             }}
           >
             <Button

@@ -12,10 +12,12 @@ export const CONNECT_STATUS = {
 const INITIAL_STATE = {
   loginStatus: CONNECT_STATUS.NOT_CONNECT,
   walletAddress: "",
+  myBook: [],
 
   login: () => {},
   logout: () => {},
   mintPFP: () => {},
+  mintBook: () => {},
 };
 
 export const AppContext = createContext(INITIAL_STATE);
@@ -26,6 +28,7 @@ const AppProvider = ({ children }) => {
 
   const [walletAddress, setWalletAddress] = useState();
   const [loginStatus, setLoginStatus] = useState(CONNECT_STATUS.NOT_CONNECT);
+  const [myBook, setMyBook] = useState(DEFAULT_BOOK);
 
   const login = () => {
     alert("connectWallet");
@@ -48,15 +51,22 @@ const AppProvider = ({ children }) => {
     return true;
   };
 
+  const mintBook = (book) => {
+    alert(`Mint success: ${book.title} - ${book.author}`);
+    setMyBook((preState) => [...preState, book]);
+  };
+
   return (
     <AppContext.Provider
       value={{
         walletAddress,
         loginStatus,
+        myBook,
 
         login,
         logout,
         mintPFP,
+        mintBook,
       }}
     >
       {children}
@@ -65,3 +75,9 @@ const AppProvider = ({ children }) => {
 };
 
 export default AppProvider;
+
+export const DEFAULT_BOOK = Array.from(Array(10).keys()).map((index) => ({
+  title: "Book - " + (index + 1),
+  author: "Author - " + index + 1,
+  ownerAddress: "0x23355234333432423",
+}));
