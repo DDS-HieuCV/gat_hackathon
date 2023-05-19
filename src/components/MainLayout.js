@@ -48,9 +48,11 @@ const MainLayout = ({ children }) => {
           </Box>
         </Container>
       </AppBar>
-      <Box component="main" sx={{ paddingTop: "117px" }}>
-        <Container sx={{ flexGrow: 1 }}>{children}</Container>
-        <UploadBook />
+      <Box component="main" sx={{ paddingTop: "117px", paddingBottom: 8 }}>
+        <Container>{children}</Container>
+        <Box width="100%">
+          <UploadBook />
+        </Box>
       </Box>
     </>
   );

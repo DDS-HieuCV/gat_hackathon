@@ -9,7 +9,12 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export default function AppDialog({ children, ...otherProps }) {
   return (
-    <Dialog TransitionComponent={Transition} keepMounted {...otherProps}>
+    <Dialog
+      maxWidth="lg"
+      TransitionComponent={Transition}
+      keepMounted
+      {...otherProps}
+    >
       <CenterBox sx={{ p: 4 }}>{children}</CenterBox>
     </Dialog>
   );
