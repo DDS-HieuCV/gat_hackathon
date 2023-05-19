@@ -5,11 +5,9 @@ import {
   CssBaseline,
   Grid,
   Paper,
-  Stack,
   Typography,
 } from "@mui/material";
 import { CONNECT_STATUS, useAppContext } from "../context/AppContext";
-import styled from "@emotion/styled";
 import { LogoImage } from "public/images";
 import MintPFP from "../components/sn-login/MintPFP";
 import { CenterBox } from "../components";

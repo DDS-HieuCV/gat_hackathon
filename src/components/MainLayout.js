@@ -1,54 +1,56 @@
 import React from "react";
 import PropTypes from "prop-types";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import { AppLink } from "./index";
 import { useRouter } from "next/router";
-import { Container } from "@mui/material";
+import { Container, Typography, Box, AppBar, Button } from "@mui/material";
+import styled from "@emotion/styled";
+import { LogoImage } from "public/images";
+import AppLink from "./AppLink";
+import UploadBook from "./UploadBook";
 
 const MainLayout = ({ children }) => {
   const { pathname } = useRouter();
 
   return (
     <>
-      <AppBar component="nav" sx={{ background: "white" }} elevation={0}>
+      <AppBar
+        component="nav"
+        sx={{ background: "white", paddingTop: 3, paddingBottom: 3 }}
+        elevation={0}
+      >
         <Container>
-          <Toolbar>
-            <Typography
-              variant="h6"
-              component="div"
-              sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
-            >
-              MUI
-            </Typography>
-            <Box sx={{ display: { xs: "none", sm: "block" } }}>
-              <AppLink
-                to={AppPath.MY_BOOK}
+          <Box sx={{ display: "flex", justifyContent: "space-around" }}>
+            <Box sx={{ display: "flex", flexGrow: 1 }}>
+              <Box component="img" src={LogoImage} sx={{ width: 41 }} />
+              <Typography
                 sx={{
-                  color:
-                    pathname === AppPath.MY_BOOK ? "primary.main" : "black",
+                  fontWeight: 600,
+                  fontSize: 34,
+                  color: "#4A3AFF",
                 }}
+              >
+                BookExchangeDAO
+              </Typography>
+            </Box>
+            <Box>
+              <StyledLink
+                href={AppPath.MY_BOOK}
+                active={pathname === AppPath.MY_BOOK}
               >
                 My Book
-              </AppLink>
-              <AppLink
-                to={AppPath.REQUESTS}
-                sx={{
-                  color:
-                    pathname === AppPath.REQUESTS ? "primary.main" : "black",
-                }}
+              </StyledLink>
+              <StyledLink
+                href={AppPath.REQUESTS}
+                active={pathname === AppPath.REQUESTS}
               >
                 Request
-              </AppLink>
+              </StyledLink>
             </Box>
-          </Toolbar>
+          </Box>
         </Container>
       </AppBar>
-      <Box component="main" sx={{ p: 3 }}>
-        <Toolbar />
-        <Container>{children}</Container>
+      <Box component="main" sx={{ paddingTop: "117px" }}>
+        <Container sx={{ flexGrow: 1 }}>{children}</Container>
+        <UploadBook />
       </Box>
     </>
   );
@@ -68,3 +70,10 @@ export const AppPath = {
   MY_BOOK: "/my-book",
   REQUESTS: "/requests",
 };
+
+const StyledLink = styled(AppLink)((props) => ({
+  color: props.active ? "primary.main" : "black",
+  fontWeight: 700,
+  fontSize: 20,
+  padding: 8,
+}));

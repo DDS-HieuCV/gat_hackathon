@@ -1,35 +1,12 @@
-import React, { memo, useMemo, forwardRef } from "react";
-import PropTypes from "prop-types";
-import Link from "next/link";
-import { Link as MuiLink } from "@mui/material";
+import React, { memo } from "react";
+import { Link } from "@mui/material";
 
-const AppLink = forwardRef((props, ref) => {
-  const { to, as, children, className, onClick, ...otherProps } = props;
-
-  const nextRouter = useMemo(() => to || "#", [to]);
-  const urlOnBrowser = useMemo(() => as, [as]);
-
+const AppLink = ({ children, ...otherProps }) => {
   return (
-    <Link href={nextRouter} as={urlOnBrowser} passHref={true}>
-      <MuiLink
-        underline="none"
-        ref={ref}
-        onClick={onClick}
-        {...otherProps}
-        component="span"
-      >
-        {children}
-      </MuiLink>
+    <Link underline="none" {...otherProps}>
+      {children}
     </Link>
   );
-});
-
-AppLink.propTypes = {
-  to: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  as: PropTypes.string,
-  onClick: PropTypes.func,
 };
-AppLink.defaultProps = {};
-AppLink.displayName = "AppLink";
 
 export default memo(AppLink);
