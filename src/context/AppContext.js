@@ -1,6 +1,8 @@
 import { useRouter } from "next/router";
-import React, { memo, useState, createContext, useContext } from "react";
+import React, { useState, createContext, useContext, useEffect } from "react";
 import { AppPath } from "../components/MainLayout";
+import Cookies from "js-cookie";
+import * as Helper from "./Helper";
 
 /* ------------- Initial State ------------- */
 export const CONNECT_STATUS = {
@@ -9,6 +11,7 @@ export const CONNECT_STATUS = {
   MINT_PFP: 3,
   CONNECTED: 4,
 };
+
 const INITIAL_STATE = {
   loginStatus: CONNECT_STATUS.NOT_CONNECT,
   walletAddress: "",
@@ -18,6 +21,7 @@ const INITIAL_STATE = {
   logout: () => {},
   mintPFP: () => {},
   mintBook: () => {},
+  getMyBook: () => {},
 };
 
 export const AppContext = createContext(INITIAL_STATE);
@@ -28,33 +32,83 @@ const AppProvider = ({ children }) => {
 
   const [walletAddress, setWalletAddress] = useState();
   const [loginStatus, setLoginStatus] = useState(CONNECT_STATUS.NOT_CONNECT);
-  const [myBook, setMyBook] = useState(DEFAULT_BOOK);
+  const [myBook, setMyBook] = useState([]);
 
-  const login = () => {
-    alert("connectWallet");
-    setWalletAddress("0x2343546547657");
+  const login = async () => {
     setLoginStatus(CONNECT_STATUS.CONNECTING);
 
+    const address = await Helper.connectWallet();
+
     setTimeout(() => {
-      setLoginStatus(CONNECT_STATUS.MINT_PFP);
+      setWalletAddress(address);
+      Cookies.set(AppKey.walletAddress, "0x2343546547657");
+      handleNavigation();
     }, 1000);
   };
 
   const logout = () => {
     alert("disconnectWallet");
+    setLoginStatus(CONNECT_STATUS.NOT_CONNECT);
     setWalletAddress();
+    Cookies.remove(AppKey.walletAddress);
   };
 
-  const mintPFP = () => {
-    alert("mintPFP success");
-    setLoginStatus(CONNECT_STATUS.CONNECTED);
-    return true;
+  const mintPFP = async () => {
+    const isResult = await Helper.mintPFP();
+
+    if (isResult) {
+      alert("mintPFP success");
+      setLoginStatus(CONNECT_STATUS.CONNECTED);
+    } else {
+      alert("mintPFP error");
+    }
+
+    return isResult;
   };
 
-  const mintBook = (book) => {
-    alert(`Mint success: ${book.title} - ${book.author}`);
-    setMyBook((preState) => [...preState, book]);
+  const mintBook = async (book) => {
+    const bookNft = await Helper.mintBookSelf(book);
+    if (bookNft) {
+      alert(`mintBook success: ${book.title} - ${book.author}`);
+      setMyBook((preState) => [...preState, bookNft]);
+    } else {
+      alert("mintBook error");
+    }
+
+    return Boolean(bookNft);
   };
+
+  const getMyBook = async () => {
+    const list = await Helper.getAllBook();
+    setMyBook(list);
+    return list;
+  };
+
+  const handleNavigation = async () => {
+    const hasMemberNFT = await Helper.hasPFPNft();
+    if (hasMemberNFT) {
+      setLoginStatus(CONNECT_STATUS.CONNECTED);
+      router.replace(AppPath.MY_BOOK);
+    } else {
+      setLoginStatus(CONNECT_STATUS.MINT_PFP);
+    }
+  };
+
+  useEffect(() => {
+    let retryCount = 0;
+    const interval = setInterval(() => {
+      if (retryCount >= 5) clearInterval(interval);
+      const cookieAddress = Cookies.get(AppKey.walletAddress);
+
+      if (cookieAddress) {
+        clearInterval(interval);
+        setWalletAddress(cookieAddress);
+        getMyBook();
+        handleNavigation();
+      }
+      retryCount++;
+    }, 500);
+  }, []);
 
   return (
     <AppContext.Provider
@@ -67,6 +121,7 @@ const AppProvider = ({ children }) => {
         logout,
         mintPFP,
         mintBook,
+        getMyBook,
       }}
     >
       {children}
@@ -76,8 +131,6 @@ const AppProvider = ({ children }) => {
 
 export default AppProvider;
 
-export const DEFAULT_BOOK = Array.from(Array(10).keys()).map((index) => ({
-  title: "Book - " + (index + 1),
-  author: "Author - " + index + 1,
-  ownerAddress: "0x23355234333432423",
-}));
+export const AppKey = {
+  walletAddress: "walletAddress",
+};

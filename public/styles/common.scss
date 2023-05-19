@@ -8,7 +8,6 @@ body {
   width: 100vw;
   height: 100vh;
   margin: 0;
-  font-family: "Gadugi", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #ffffff;
@@ -63,17 +62,4 @@ body {
   display: -webkit-box;
   -webkit-line-clamp: 1; // default 1 line
   -webkit-box-orient: vertical;
-}
-
-// Hidden arrow of number input
-/* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* Firefox */
-input[type="number"] {
-  -moz-appearance: textfield;
 }

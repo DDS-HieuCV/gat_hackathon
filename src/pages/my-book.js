@@ -43,8 +43,8 @@ const MyBook = () => {
         <EmptyBook />
       ) : (
         <Stack direction="row" spacing={2} flexWrap="wrap">
-          {bookList.map((book) => (
-            <MyBookItem book={book} onSwap={handleSwap} />
+          {bookList.map((book, index) => (
+            <MyBookItem key={index} book={book} onSwap={handleSwap} />
           ))}
         </Stack>
       )}

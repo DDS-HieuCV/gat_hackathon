@@ -10,7 +10,7 @@ import {
   TableCell,
 } from "@mui/material";
 import AppDialog from "../AppDialog";
-import { DEFAULT_BOOK } from "../../pages/my-book";
+import { DEFAULT_BOOK } from "../../context/Helper";
 
 const SendRequestDialog = ({ book, onClose, ...otherProps }) => {
   const [bookList, setBookList] = useState(DEFAULT_BOOK);

@@ -6,6 +6,7 @@ import styled from "@emotion/styled";
 import { LogoImage } from "public/images";
 import AppLink from "./AppLink";
 import UploadBook from "./UploadBook";
+import WalletButton from "./WalletButton";
 
 const MainLayout = ({ children }) => {
   const { pathname } = useRouter();
@@ -41,9 +42,11 @@ const MainLayout = ({ children }) => {
               <StyledLink
                 href={AppPath.REQUESTS}
                 active={pathname === AppPath.REQUESTS}
+                sx={{ marginRight: 3 }}
               >
                 Request
               </StyledLink>
+              <WalletButton />
             </Box>
           </Box>
         </Container>

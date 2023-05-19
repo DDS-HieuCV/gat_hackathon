@@ -4,13 +4,14 @@ import { Button, Box } from "@mui/material";
 import { PhantomIcon } from "public/images";
 
 const WalletButton = (props) => {
-  const { walletAddress } = useAppContext();
+  const { walletAddress, logout } = useAppContext();
 
   return (
     <Button
       size="large"
       variant="contained"
       startIcon={<Box component="img" src={PhantomIcon} />}
+      onClick={logout}
       {...props}
     >
       {walletAddress}
