@@ -4,7 +4,7 @@ import { AddCircle } from "@mui/icons-material";
 import { Button, Typography, TextField, Stack } from "@mui/material";
 
 const UploadBook = () => {
-  const [isShow, setIsShow] = useState(true);
+  const [isShow, setIsShow] = useState(false);
   const [book, setBook] = useState({ title: "", author: "" });
 
   const handleMintBook = () => {
@@ -21,6 +21,7 @@ const UploadBook = () => {
         size="large"
         variant="outlined"
         startIcon={<AddCircle fontSize="large" />}
+        onClick={() => setIsShow(true)}
       >
         Upload your book
       </Button>
@@ -28,7 +29,7 @@ const UploadBook = () => {
       <AppDialog sx={{ p: 4 }} open={isShow}>
         <Stack spacing={2}>
           <Typography sx={{ fontWeight: 500, fontSize: 24, color: "#4A3AFF" }}>
-            Mint PFP success!
+            Upload your book
           </Typography>
           <TextField
             id="title"
